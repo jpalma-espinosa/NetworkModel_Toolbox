@@ -1,4 +1,6 @@
 import numpy as np
+import time
+import tqdm
 def Kuramoto_Delays_Run_AAL(C, D, f, K, MD):
     ############################%%%#
     #
@@ -25,18 +27,19 @@ def Kuramoto_Delays_Run_AAL(C, D, f, K, MD):
     # f=40 # Node natural frequency in Hz (i.e. f=40))
     # MD=0.02 # Mean Delay in seconds (i.e. MD=0.01)
     # K=5;
+    # %%%
     dt = 1.e-4 # Resolution of model integration in seconds (i.e. dt=1e-4)
     tmax = 1. # Total simulation time in seconds
     t_prev = 0. # Total preview time in seconds
     dt_save = 2.e-3 # Resolution of saved simulations in seconds
     noise = 0
-
+#%%
     # Normalize parameters
     N = C.shape[0] # Number of units
     Omegas = 2*np.pi*f*np.ones(N)*dt # Frequency of all units in radians/second
     kC = K*C*dt # Scale matrix C with 'K' and 'dt' to avoid doing it at each step
     dsig = np.sqrt(dt)*noise # normalize std of noise with dt
-
+#%%%
     # Set a matrix of Delays containing the number of time-steps between nodes
     # Delays are integer numbers, so make sure the dt is much smaller than the
     # smallest delay.
@@ -77,10 +80,10 @@ def Kuramoto_Delays_Run_AAL(C, D, f, K, MD):
     print('Max_History=',  Max_History, 'steps')
 
 
-    import time
+    
     tic = time.time() # to count the time of each run
     nt = 0
-    import tqdm
+    
     for i_t in tqdm.tqdm(range(int((t_prev+tmax)/dt))):
         # We only start saving after t_prev
         Phase_Now = Phases_History[:, -1] # The last collumn of Z is 'now'

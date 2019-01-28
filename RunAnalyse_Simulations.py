@@ -13,15 +13,15 @@
 #
 #####################%%%%%%
 import numpy as np
-# Define here the Network Spatial and Temporal structure
-
-# Define the Structural Network as a NxN matrix
 from scipy.io import loadmat
+import matplotlib.pyplot as plt
+
+#%%%
+# Define the Structural Network as a NxN matrix
 C = loadmat('./AAL_matrices.mat')['C']
-
 # Number of coupled Units
-N = C.shape[0]
-
+N = np.array(C.shape[0])
+#%%%
 # note: using the line below Normalizes the whole matrix by the mean
 # of all non-diagonal elements is 1. 
 # C=C/mean(C(ones(N)-eye(N)>0));
@@ -32,19 +32,16 @@ C[np.diag(np.ones(N))==0] /= C[np.diag(np.ones(N))==0].mean()
 # Distance between areas
 D = loadmat('./AAL_matrices.mat')['D']
 D /= 1000 # Distance matrix in meters
-
+#%%%
 # Define here the parameters of the network model to be manipulated
-
 # Node natural frequency in Hz
 f = 40    # (i.e. f=40)):
-
 # Mean Delay in seconds
 MD = 0.02 # (i.e. MD = 0.01)
-
 # Global Coupling strength
 K = 5 #
 
-
+#%%%
 # Process the simulated data and generate figures
 
 # Call here the function of the Network Model
@@ -52,11 +49,15 @@ from Kuramoto_Delays_Run import Kuramoto_Delays_Run_AAL
 Phases_Save, dt_save = Kuramoto_Delays_Run_AAL(C, D, f, K, MD)
 
 # Process the simulated data and generate figures
-import matplotlib.pyplot as plt
+
 
 N_time = Phases_Save.shape[1] 
 tmax = N_time / dt_save
 time = np.linspace(0, tmax, N_time)
+
+#%%%
+
+
 
 # Plot simulated time series
 fig, ax = plt.subplots(1, 1, figsize=(15, 8))
